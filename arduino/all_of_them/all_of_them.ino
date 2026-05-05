@@ -1,8 +1,8 @@
-#include <Wire.h>
+#include <Wire.h> // wire 라이브러리
 
 void setup() {
   Wire.begin();
-  Serial.begin(9600);
+  Serial.begin(9600); // 9600 braud
   while (!Serial); 
   Serial.println("\nI2C Scanner");
 }
@@ -13,7 +13,7 @@ void loop() {
 
   Serial.println("Scanning...");
 
-  for (address = 1; address < 127; address++) {
+  for (address = 1; address < 127; ++address) {
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
 
