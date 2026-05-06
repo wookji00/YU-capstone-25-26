@@ -10,7 +10,6 @@
 ```bash
 git repo clone https://github.com/synartisi/YU-capstone-25-26.git
 ```
-```
 
 ### Mac & Linux
 
