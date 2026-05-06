@@ -4,8 +4,8 @@
 ### 프로젝트 소개
 본 저장소는 영남대학교 기계공학부 기계공학전공(정창윤 교수님) 25-26 캡스톤디자인 프로젝트를 위한 공간입니다.\
 2025-2026 Yeungnam University Mechanical Engineering Capstone Design
-> **Distro support:** **Rasberry Pi 5 8GB's Operating system Raspbian OS (Debian Distros)* is main.\
-> **Used Programs:** **아두이노 IDE, VSCODE, Linux Terminal(bash:Gnome 내장 nano), LLMs(Google Gemini)..etc(추가 가능)
+> **Distro support:** Rasberry Pi 5 8GB's Operating system Raspbian OS (Debian Distros)* is main.\
+> **Used Programs:** 아두이노 IDE, VSCODE, Linux Terminal(bash:Gnome 내장 nano), LLMs(Google Gemini)..etc(추가 가능)
 ---
 ## Quick Install
 > **Install Files:** Arduino(cpp) & Python
