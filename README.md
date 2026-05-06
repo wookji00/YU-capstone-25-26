@@ -6,7 +6,7 @@
 > **Install Files:** Arduino(cpp) & Python
 
 ### How to Install (Windows)
-1. Install [[git bash|https://git-scm.com/install/windows]]
+1. Install [git bash](https://git-scm.com/install/windows)
 
 ```bash
 git repo clone https://github.com/synartisi/YU-capstone-25-26.git
