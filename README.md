@@ -3,8 +3,16 @@
 > **Distro support:** **Rasberry Pi 5 8GB's Operating system Raspbian OS (Debian Distros)* is main.
 > **Used Programs:** **아두이노 IDE, VSCODE, Linux Terminal(bash:Gnome 내장 nano), LLMs(Google Gemini)..etc.
 ## Quick Install
-> **Install Files:**
-### Arduino(cpp) & Python
+> **Install Files:** Arduino(cpp) & Python
+
+### How to Install (Windows)
+
+```bash
+git repo clone https://github.com/synartisi/YU-capstone-25-26.git
+```
+```
+
+### Mac & Linux
 
 ```bash
 git clone https://github.com/synartisi/25-26-YU-Capstone-Design.git && cd 25-26-YU-Capstone-Design
