@@ -1,6 +1,11 @@
-# 25-26 영남대학교 기계공학부 기계공학전공 캡스톤디자인 레포지토리
-## 25-26 Yeungnam University Mechanical Engineering Capstone Design
-25-26년도 영남대학교 기계공학부 캡스톤디자인(정창윤 교수님) Codes Repo.
+# 🛠️ 25-26 기계공학 캡스톤디자인
+**Yeungnam University | Mechanical Engineering**
+---
+![School](https://www.yu.ac.kr/main/index.do)
+---
+### 프로젝트 소개
+본 저장소는 영남대학교 기계공학부 기계공학전공(정창윤 교수님) 25-26 캡스톤디자인 프로젝트를 위한 공간입니다.
+25-26 Yeungnam University Mechanical Engineering Capstone Design
 > **Distro support:** **Rasberry Pi 5 8GB's Operating system Raspbian OS (Debian Distros)* is main.\
 > **Used Programs:** **아두이노 IDE, VSCODE, Linux Terminal(bash:Gnome 내장 nano), LLMs(Google Gemini)..etc.
 ## Quick Install
