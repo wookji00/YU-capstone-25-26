@@ -36,9 +36,11 @@ git clone https://github.com/synartisi/25-26-YU-Capstone-Design.git && cd 25-26-
 **Note:** 
   1. 현재는 Rasberry Pi 5 대신 Raspberry Pi 4 + Raspbian PI OS 64 bit 를 설치해 사용 중
   2. WITMOTION WT901C485 9-IMU 센서 작동 확인 ✅
-  3. 무선동기티칭펜던트 + Bus Servo Motor 관련 Arduino Board Uno board 작동 관련 문제
-  4. 구동부 차량 수령 필요
+  3. 무선동기티칭펜던트 + Bus Servo Motor 관련 Arduino Board Uno board 작동 관련 문제 확인 완 ✅
+    - MG996R servo 구동 확인 완 + 모터 전원 부족 문제 확인 ✅
+  4. 구동부 차량 수령 확인 및 휠 구동 확인 완(by arduino 보드) ✅
   5. Arduino + HC-06 + IMU 데이터 블루투스 통신 with 라즈베리파이 통신 확인 ✅
+  6. 
 
 ---
 ## ***논문(포스터, 결과 보고서, 발표영상)*** 제출 및 프로젝트 마무리 기한(**Deadline**) : ~ 26-05-25
