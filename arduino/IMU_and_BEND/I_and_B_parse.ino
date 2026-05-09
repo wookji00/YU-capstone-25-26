@@ -10,7 +10,7 @@ unsigned char rxBuffer[11];
 
 void setup() {
   // PC 전송 속도는 115200 (데이터 누락 방지)
-  Serial.begin(115200); 
+  Serial.begin(9600); 
   // IMU 통신 속도는 센서 기본값인 9600
   imuSerial.begin(9600); 
 
@@ -61,5 +61,5 @@ void loop() {
 
   // 전체 루프 속도 (20Hz 정도로 설정: 50ms)
   // 위쪽 delay(40)과 합쳐져 약 50~60ms 주기로 데이터가 전송됩니다.
-  delay(10); 
+  delay(100); 
 }
