@@ -3,7 +3,6 @@ from adafruit_servokit import ServoKit
 # function : servo repeat
 def rep(num, rad):
     kit.servo[num].angle = rad
-    time.sleep(1)
     return
 
 # 16채널 PCA9685 객체 생성
@@ -14,12 +13,14 @@ kit = ServoKit(channels=16)
 kit.servo[0].set_pulse_width_range(500, 2500)
 
 while True:
-    for _ in [0, 2, 4, 6, 8]:
-        print("0도")
-        rep(_, 0)
+    for _ in [0, 90, 180]:
+        print(f"{_} 도")
+        print("0, 2, 4, 6, 8")
+        rep(0, _)
+        rep(2, _)
+        rep(4, _)
+        rep(6, _)
+        rep(8, _)
+        time.sleep(1)
 
-        print("90도")
-        rep(_, 90)
-
-        print("180도")
-        rep(_, 180)
+        
