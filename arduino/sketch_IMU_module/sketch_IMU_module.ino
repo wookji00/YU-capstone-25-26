@@ -2,6 +2,8 @@
 
 SoftwareSerial imuSerial(2, 3); // 2번: RX (CVBE-010의 TXD), 3번: TX (CVBE-010의 RXD) ++ 아두이노 보드의 TX RX 핀사용하면 안된다고 함.
 
+// WT901C485 축 기준: X=Roll(좌우), Y=Pitch(앞뒤), Z=Yaw(방향)
+
 // Modbus 요청 패킷 (롤링, 피칭, 요잉)
 byte requestAngle[] = {0x50, 0x03, 0x00, 0x3D, 0x00, 0x03, 0x99, 0x86}; 
 
@@ -51,5 +53,5 @@ void loop() {
     Serial.println("Waiting for valid data packet...");
   }
 
-  delay(1000); // time step = 1 sec
+  delay(100); // time step = 1 sec
 }
