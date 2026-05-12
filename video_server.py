@@ -14,7 +14,7 @@ app = Flask(__name__)
 # 1 Picam2를 전역으로 한번 초기화
 picam2 = Picamera2()
 video_config = picam2.create_video_configuration(
-    main={"size": (800, 480), "format": "RGB888"}, transform=Transform(hflip=False, vflip=False)
+    main={"size": (640, 480), "format": "MJPEG"}, transform=Transform(hflip=False, vflip=False)
 )
 picam2.configure(video_config)
 picam2.start()
