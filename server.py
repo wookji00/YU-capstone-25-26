@@ -25,7 +25,7 @@ def capture_frames():
     global global_frame
     while True:
         # picam2 로부터 프레임 캡처 (numpy array)
-        frame_data = picam2.caputre_array()
+        frame_data = picam2.capture_array()
 
         # 필요하면 OpenCV 처리
         frame_data = cv2.cvtColor(frame_data, cv2.COLOR_RGB2BGR)
@@ -45,7 +45,7 @@ def capture_frames():
 
 
 # 3 백그라운드 스레드 시작
-capture_thread = threading.Thread(targget=capture_frames)
+capture_thread = threading.Thread(target=capture_frames)
 capture_thread.daemon = True
 capture_thread.start()
 
