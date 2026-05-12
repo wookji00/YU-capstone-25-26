@@ -11,7 +11,7 @@ unsigned char rxBuffer[11];
 int bufferIndex = 0;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   imuSerial.begin(9600); // 센서 기본 통신 속도
   Serial.println("WT901C485 Modbus Angle Reader Start!");
 }
