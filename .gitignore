@@ -3,7 +3,10 @@
 # =========================
 
 # Byte-compiled / optimized / DLL files
+.venv/
+venv/
 __pycache__/
+*.pyc
 *.py[codz]
 *$py.class
 
