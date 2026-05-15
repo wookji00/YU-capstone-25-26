@@ -3,8 +3,7 @@
 <small>25-26 캡스톤디자인</small>
 
 ---
-# 라즈베리파이 OS는 최소 32GB SD카드에
-# Raspberry Pi Imager를 이용해서 굽는걸 추천
+## 라즈베리파이 OS는 최소 32GB SD카드에 Raspberry Pi Imager를 이용해서 굽는걸 추천
 ---
 # 0. 라즈베리파이 자체 설정
 ```bash
@@ -17,8 +16,6 @@ sudo fc-cache -fv 	# 설치한 폰트를 리눅스가 읽게 하기
 sudo raspi-config 	# 라즈베리파이 시스템 공식 콘솔 매니저 명령어
 # etc... 램 cpu gpu 사용량 확인(== Windows 의 작업 관리자 역할)
 sudo apt install btop 	# bash에 btop 타이밍 시 관리 가능
-```
-```
 ```
 ---
 
@@ -57,6 +54,5 @@ dependencies = ["numpy",
 thonny [test.py|코드 파일 이름]
 python [test.py|실행시키고 싶은 파일 이름]	# Python 코드 실행
 # **꼭 source 가상환경이름/bin/activate 하고 실행시키기**
-```
 ```
 
