@@ -29,9 +29,9 @@ git clone https://github.com/synartisi/25-26-YU-Capstone-Design.git && cd 25-26-
 
 ---
 ## 계획
-
+<!-- 25-26 코딩팀의 계획 위주로 기록해주세요-->
 ### Robotics model and arduino Car model for Capstone
-**Rasberry Pi 4 4GB, Rasberry Pi 5 8GB, and --Arduino Mega 2560 Board--, --Arduino Nano Board--, Arduino Uno Board --Custom boards--**
+**Rasberry Pi 4 4GB, Rasberry Pi 5 8GB, and ~~Arduino Mega 2560 Board, Arduino Nano Board~~, Arduino Uno Board ~~Custom boards~~**
 
 **Note:** 
   1. 현재는 Rasberry Pi 5 대신 Raspberry Pi 4 + Raspbian PI OS 64 bit 를 설치해 사용 중
