@@ -1,8 +1,8 @@
-# SPDX-FileCopyrightText: 2026 코딩 파트너 for User Project
+# SPDX-FileCopyrightText:
 # SPDX-License-Identifier: MIT
+# import time
 
 import json
-import time
 import board
 import paho.mqtt.client as mqtt
 from adafruit_motor import servo
@@ -20,10 +20,14 @@ pca = PCA9685(i2c)
 pca.frequency = 50
 
 # 로봇팔 서보모터 채널 할당
-servo_gripper = servo.Servo(pca.channels[14], min_pulse=503, max_pulse=2495)  # 채널 0: 집게
-servo_joint1 = servo.Servo(pca.channels[8])  # 채널 1: 하부 관절 1
-servo_joint2 = servo.Servo(pca.channels[4])  # 채널 2: 상부 관절 2
-servo_joint3 = servo.Servo(pca.channels[0]) # 채널 0 : 바닥 회전
+servo_gripper = servo.Servo(
+    pca.channels[14], min_pulse=503, max_pulse=2495
+)  # 채널 14: 집게
+servo_joint3 = servo.Servo(pca.channels[8])  # 채널 8: 상부 관절 1
+servo_joint2 = servo.Servo(pca.channels[4])  # 채널 4: 하부 관절 2
+servo_joint1 = servo.Servo(pca.channels[0])  # 채널 0 : 바닥 회전
+servo_joint4 = servo.Servo(pca.channels[12])  # 채널 12 : 손목 회전 = base_grip
+
 
 def map_value(value, in_min, in_max, out_min, out_max):
     """입력값을 센서 범위에서 서보모터의 안전 가동 각도 범위로 선형 변환합니다."""
@@ -79,7 +83,7 @@ def on_message(client, userdata, msg):
         servo_joint4.angle = joint4_angle
 
         print(
-                f"📥 [Sub 구동] fore finger:{flex1:4d}°, mid finger:{flex2:4d}°, Roll:{roll:5d}°, Pitch:{pitch:5d}°, Yaw:{yaw:5d}° ➔ Gripper:{gripper_angle:5d}° | J1:{joint1_angle:5d}°| J2: {joint2_angle:5d}° | J3: {servo_joint3_angle:5d}° |J4: {joint4_angle:5d}° "
+            f"📥 [Sub 구동] fore finger:{flex1:4d}°, mid finger:{flex2:4d}°, Roll:{roll:5d}°, Pitch:{pitch:5d}°, Yaw:{yaw:5d}° ➔ Gripper:{gripper_angle:5d}° | J1:{joint1_angle:5d}°| J2: {joint2_angle:5d}° | J3: {wrist_up_down_angle:5d}° |J4: {joint4_angle:5d}° "
         )
 
     except Exception as e:

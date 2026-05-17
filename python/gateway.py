@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 코딩 파트너 for User Project
+# SPDX-FileCopyrightText
 # SPDX-License-Identifier: MIT
 
 import json
@@ -61,9 +61,7 @@ try:
 
                     # 체크섬 검증
                     arduino_style_string = data_part_str + ","
-                    calculated_checksum = calculate_xor_checksum(
-                        arduino_style_string
-                    )
+                    calculated_checksum = calculate_xor_checksum(arduino_style_string)
 
                     try:
                         received_checksum = int(received_checksum_str)
@@ -74,7 +72,7 @@ try:
                     if calculated_checksum == received_checksum:
                         value_list = data_part_str.split(",")
 
-                        if len(value_list) == 4:
+                        if len(value_list) == 5:
                             # 가독성과 확장성을 위해 JSON 구조로 매핑
                             sensor_data = {
                                 "roll": int(value_list[0]),
@@ -86,9 +84,7 @@ try:
                             }
 
                             # 객체를 문자열로 직렬화하여 특정 토픽으로 발행(Publish)
-                            mqtt_client.publish(
-                                MQTT_TOPIC, json.dumps(sensor_data)
-                            )
+                            mqtt_client.publish(MQTT_TOPIC, json.dumps(sensor_data))
                             print(f"📤 [Pub] {sensor_data}")
 
             except Exception as e:
