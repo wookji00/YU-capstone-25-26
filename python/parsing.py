@@ -57,14 +57,14 @@ while True:
                     value_list = data_part_str.split(",")
 
                     if len(value_list) == 4:
-                        roll = float(value_list[0])
-                        pitch = float(value_list[1])
-                        yaw = float(value_list[2])
+                        roll = int(value_list[0])
+                        pitch = int(value_list[1])
+                        yaw = int(value_list[2])
                         flex = int(value_list[3])
 
                         # [성공] 데이터를 안전하게 출력하고 변수에 저장합니다.
                         print(
-                            f"✅ [정상] Roll: {roll:6.2f} | Pitch: {pitch:6.2f} | Yaw: {yaw:6.2f} | Flex: {flex:4d}"
+                            f"✅ [정상] Roll: {roll:6d} | Pitch: {pitch:6d} | Yaw: {yaw:6d} | Flex: {flex:4d}"
                         )
 
                         # TODO: 여기에 PCA9685 서보모터 제어 함수나 KOA FC 명령 송신 로직을 연결하면 됩니다.

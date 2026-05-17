@@ -97,9 +97,9 @@ try:
                         value_list = data_part_str.split(",")
 
                         if len(value_list) == 4:
-                            roll = float(value_list[0])
-                            pitch = float(value_list[1])
-                            yaw = float(value_list[2])
+                            roll = int(value_list[0])
+                            pitch = int(value_list[1])
+                            yaw = int(value_list[2])
                             flex = int(value_list[3])
 
                             # ------------------------------------------
@@ -129,7 +129,7 @@ try:
 
                             # 콘솔 실시간 모니터링 출력 (디버깅용)
                             print(
-                                f"✅ [정상] Roll:{roll:6.1f} | Pitch:{pitch:6.1f} | Flex:{flex:4d} "
+                                f"✅ [정상] Roll:{roll:6d} | Pitch:{pitch:6d} | Flex:{flex:4d} "
                                 f"➔ [모터 각도] Gripper:{gripper_angle:5.1f}° | J1:{joint1_angle:5.1f}° | J2:{joint2_angle:5.1f}°"
                             )
 
