@@ -14,17 +14,19 @@ MQTT_BROKER = "localhost"
 MQTT_TOPIC = "robot/glove/sensors"
 
 # PCA9685 I2C 및 서보모터 인스턴스 초기화
-MINIMUM = 500
-MAXIMUM = 2500
-
 i2c = board.I2C()
 pca = PCA9685(i2c)
-pca.frequency = 60
+pca.frequency = 50
 
-servo_gripper = servo.Servo(pca.channels[14], min_pulse=503, max_pulse=2497)  # 채널 14: 집게
-servo_joint3 = servo.Servo(pca.channels[8], min_pulse=505, max_pulse=2493)  # 채널 8: 상부 관절 1
-servo_joint2 = servo.Servo(pca.channels[4], min_pulse=500, max_pulse=2500)  # 채널 4: 하부 관절 2
-servo_joint1 = servo.Servo(pca.channels[0], min_pulse=500, max_pulse=2500)  # 채널 0: 바닥 회전
+# [완벽 교정 파트] 눈에 보이지 않던 U+00A0 특수문자 공백을 완전 제거하고 순수 공백으로 재배치했습니다.
+servo_gripper = servo.Servo(
+    pca.channels[14], min_pulse=503, max_pulse=2495
+)  # 채널 14: 집게
+servo_joint3 = servo.Servo(pca.channels[8])  # 채널 8: 상부 관절 1
+servo_joint2 = servo.Servo(pca.channels[4])  # 채널 4: 하부 관절 2
+servo_joint1 = servo.Servo(pca.channels[0])  # 채널 0: 바닥 회전[cite: 8]
+servo_joint4 = servo.Servo(pca.channels[12])  # 채널 12: 손목 회전 = base_grip[cite: 8]
+
 
 def map_value(value, in_min, in_max, out_min, out_max):
     """입력값을 센서 범위에서 서보모터의 안전 가동 각도 범위로 선형 변환합니다."""
@@ -48,7 +50,7 @@ def on_connect(client, userdata, flags, rc, properties=None):
 def on_message(client, userdata, msg):
     """새로운 센서 데이터(Message)가 발행되면 호출되어 모터를 제어합니다."""
     try:
-        # JSON 문자열을 파이썬 딕셔너리로 역직렬화
+        # JSON 문자열을 파이썬 딕셔너리로 역직렬화[cite: 8]
         payload = json.loads(msg.payload.decode("utf-8"))
 
         roll = payload["roll"]
@@ -60,24 +62,27 @@ def on_message(client, userdata, msg):
         # ------------------------------------------
         # 💡 원격 로봇팔 구동을 위한 각도 계산 제어부
         # ------------------------------------------
-        # 1. 밴딩(Flex) 센서 데이터를 이용한 집게 및 상부 관절 제어
-        gripper_angle = map_value(flex1, 180, 10, 0, 180)
-        wrist_up_down_angle = map_value(flex2, 110, 190, 0, 130)
+        # 1. 밴딩(Flex) 센서 데이터를 이용한 집게 제어[cite: 8]
+        gripper_angle = map_value(flex1, 80, 300, 180, 0)
+        wrist_up_down_angle = map_value(flex2, 80, 300, 180, 0)
         servo_gripper.angle = gripper_angle
         servo_joint3.angle = wrist_up_down_angle
 
-        # 2. IMU 각도를 이용한 다축 로봇팔 방향 제어
-        joint1_angle = map_value(yaw, -180, 180, 0, 180)#map_value(yaw, -170, -70, 30, 150)
-        joint2_angle = map_value(pitch, -120, 120, 0, 130)
-        # joint4_angle = map_value(roll, -120, 120, 0, 185)
+        # 2. IMU Pitch 각도를 이용한 수직 xz평면 로봇팔 제어[cite: 8]
+        arm_up_down_angle = map_value(pitch, -60, 60, 30, 150)
+        arm_rotate_angle = map_value(yaw, -170, -70, 120, 180)
+        wrist_axis_rotate_angle = map_value(roll, -45, 45, 45, 135)
+        joint1_angle = arm_rotate_angle
+        joint2_angle = arm_up_down_angle
+        joint4_angle = wrist_axis_rotate_angle
 
-        # 물리 서보모터 각도 제어 신호 전달
+        # 물리 서보모터 각도 출력[cite: 8]
         servo_joint1.angle = joint1_angle
         servo_joint2.angle = joint2_angle
-        # servo_joint4.angle = joint4_angle
+        servo_joint4.angle = joint4_angle
 
         print(
-            f"📥 [Sub 구동] fore finger:{flex1:4d}°, mid finger:{flex2:4d}°, Roll:{roll:5d}°, Pitch:{pitch:5d}°, Yaw:{yaw:5d}° ➔ Gripper:{gripper_angle:5d}° | J1:{joint1_angle:5d}°| J2: {joint2_angle:5d}° | J3: {wrist_up_down_angle:5d}° |J4: ° "
+            f"📥 [Sub 구동] fore finger:{flex1:4d}°, mid finger:{flex2:4d}°, Roll:{roll:5d}°, Pitch:{pitch:5d}°, Yaw:{yaw:5d}° ➔ Gripper:{gripper_angle:5d}° | J1:{joint1_angle:5d}°| J2: {joint2_angle:5d}° | J3: {wrist_up_down_angle:5d}° |J4: {joint4_angle:5d}° "
         )
 
     except Exception as e:
@@ -93,7 +98,7 @@ client.on_message = on_message
 
 try:
     client.connect(MQTT_BROKER, 1883, 60)
-    # 네트워크 루프를 백그라운드 스레드에서 무한 실행하여 이벤트를 대기합니다.
+    # 네트워크 루프를 백그라운드 스레드에서 무한 실행하여 이벤트를 대기합니다.[cite: 8]
     client.loop_forever()
 
 except KeyboardInterrupt:

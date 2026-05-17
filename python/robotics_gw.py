@@ -19,21 +19,52 @@ MAXIMUM = 2500
 
 i2c = board.I2C()
 pca = PCA9685(i2c)
-pca.frequency = 60
+
+# [★수정] 60에서 50으로 변경 (서보모터 표준 주파수)
+pca.frequency = 50
 
 servo_gripper = servo.Servo(pca.channels[14], min_pulse=503, max_pulse=2497)  # 채널 14: 집게
-servo_joint3 = servo.Servo(pca.channels[8], min_pulse=505, max_pulse=2493)  # 채널 8: 상부 관절 1
-servo_joint2 = servo.Servo(pca.channels[4], min_pulse=500, max_pulse=2500)  # 채널 4: 하부 관절 2
-servo_joint1 = servo.Servo(pca.channels[0], min_pulse=500, max_pulse=2500)  # 채널 0: 바닥 회전
+servo_joint3 = servo.Servo(pca.channels[8])  # 채널 8: 상부 관절 1
+servo_joint2 = servo.Servo(pca.channels[4])  # 채널 4: 하부 관절 2
+servo_joint1 = servo.Servo(pca.channels[0])  # 채널 0: 바닥 회전
 
 def map_value(value, in_min, in_max, out_min, out_max):
     """입력값을 센서 범위에서 서보모터의 안전 가동 각도 범위로 선형 변환합니다."""
-    if value < in_min:
-        value = in_min
-    if value > in_max:
-        value = in_max
+    # 1. 입력 범위의 실제 최솟값과 최댓값을 구합니다.
+    real_in_min = min(in_min, in_max)
+    real_in_max = max(in_min, in_max)
+    
+    # 2. 입력값이 센서 범위를 벗어나지 않도록 강제로 고정(Clamp)합니다.
+    if value < real_in_min:
+        value = real_in_min
+    if value > real_in_max:
+        value = real_in_max
+        
+    # 3. 선형 변환 공식 적용
+    mapped = (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+    
+    # 4. 최종 출력값도 서보모터 안전 범위(out_min, out_max)를 벗어나지 않도록 한번 더 고정
+    real_out_min = min(out_min, out_max)
+    real_out_max = max(out_min, out_max)
+    
+    return int(max(real_out_min, min(real_out_max, mapped)))
+'''
+def map_value(value, in_min, in_max, out_min, out_max):
+    """입력값을 센서 범위에서 서보모터의 안전 가동 각도 범위로 선형 변환합니다."""
+    # 역방향 매핑(in_min > in_max)인 경우를 위해 대소비교 후 컷팅
+    actual_min = min(in_min, in_max)
+    actual_max = max(in_min, in_max)
+    
+    if in_min > in_max: # 예: flex1 (180 -> 10)
+        if value > in_min: value = in_min
+        if value < in_max: value = in_max
+    else:
+        if value < in_min: value = in_min
+        if value > in_max: value = in_max
+        
     mapped = (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
     return int(mapped)
+'''
 
 
 # ==========================================
@@ -63,21 +94,27 @@ def on_message(client, userdata, msg):
         # 1. 밴딩(Flex) 센서 데이터를 이용한 집게 및 상부 관절 제어
         gripper_angle = map_value(flex1, 180, 10, 0, 180)
         wrist_up_down_angle = map_value(flex2, 110, 190, 0, 130)
+        
+        # 각도 범위 초과 방지 (0~180 안전 장치)
+        gripper_angle = max(0, min(180, gripper_angle))
+        wrist_up_down_angle = max(0, min(180, wrist_up_down_angle))
+
         servo_gripper.angle = gripper_angle
         servo_joint3.angle = wrist_up_down_angle
 
         # 2. IMU 각도를 이용한 다축 로봇팔 방향 제어
-        joint1_angle = map_value(yaw, -180, 180, 0, 180)#map_value(yaw, -170, -70, 30, 150)
+        joint1_angle = map_value(yaw, -180, 180, 0, 180)
         joint2_angle = map_value(pitch, -120, 120, 0, 130)
-        # joint4_angle = map_value(roll, -120, 120, 0, 185)
+        
+        joint1_angle = max(0, min(180, joint1_angle))
+        joint2_angle = max(0, min(180, joint2_angle))
 
         # 물리 서보모터 각도 제어 신호 전달
         servo_joint1.angle = joint1_angle
         servo_joint2.angle = joint2_angle
-        # servo_joint4.angle = joint4_angle
 
         print(
-            f"📥 [Sub 구동] fore finger:{flex1:4d}°, mid finger:{flex2:4d}°, Roll:{roll:5d}°, Pitch:{pitch:5d}°, Yaw:{yaw:5d}° ➔ Gripper:{gripper_angle:5d}° | J1:{joint1_angle:5d}°| J2: {joint2_angle:5d}° | J3: {wrist_up_down_angle:5d}° |J4: ° "
+            f"📥 [Sub 구동] fore: {flex1:4d}°, mid: {flex2:4d}°, Roll: {roll:5d}°, Pitch: {pitch:5d}°, Yaw: {yaw:5d}° ➔ Gripper: {gripper_angle:3d}° | J1: {joint1_angle:3d}° | J2: {joint2_angle:3d}° | J3: {wrist_up_down_angle:3d}°"
         )
 
     except Exception as e:
@@ -93,7 +130,6 @@ client.on_message = on_message
 
 try:
     client.connect(MQTT_BROKER, 1883, 60)
-    # 네트워크 루프를 백그라운드 스레드에서 무한 실행하여 이벤트를 대기합니다.
     client.loop_forever()
 
 except KeyboardInterrupt:
@@ -101,3 +137,4 @@ except KeyboardInterrupt:
 finally:
     pca.deinit()
     print("🔒 PCA9685 인스턴스가 안전하게 닫혔습니다.")
+
