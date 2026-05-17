@@ -16,6 +16,7 @@ app = Flask(__name__)
 
 # 1 Picam2를 전역으로 한번 초기화
 picam2 = Picamera2()
+print(Picamera2.global_camera_info())
 video_config = picam2.create_video_configuration(
     main={"size": (640, 480), "format": "BGR888"}, transform=Transform(hflip=False, vflip=False)
 )
@@ -107,7 +108,7 @@ def get_fps(): # 현재 fps rate를 요청 할때 보내줌
 if __name__ == "__main__":
     try:
         app.run(
-            host="0.0.0.0", port=5000, debug=True, use_reloader=False
+            host="0.0.0.0", port=5000, debug=False, use_reloader=False
         )  # 기본적으로 디버그 모드에서는 코드변경을 감지해서 서버를 자동 재시작하는 리로더가 초기화됨.
         # 이 기능이 초기화 코드를 2번 실행하게 할수도 있으므로 비활성화
     finally:

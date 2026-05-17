@@ -67,13 +67,13 @@ def on_message(client, userdata, msg):
         # 💡 원격 로봇팔 구동을 위한 각도 계산 제어부
         # ------------------------------------------
         # 1. 밴딩(Flex) 센서 데이터를 이용한 집게 및 상부 관절 제어
-        gripper_angle = map_value(flex1, 150, 280, 0, 180)
+        gripper_angle = map_value(flex1, 150, 250, 0, 180)
         wrist_up_down_angle = map_value(flex2, 150, 280, 130, 0)
         servo_gripper.angle = gripper_angle
         servo_joint3.angle = wrist_up_down_angle
 
         # 2. IMU 각도를 이용한 다축 로봇팔 방향 제어
-        joint1_angle = map_value(yaw, -180, 180, 70, 180)#map_value(yaw, -170, -70, 30, 150) 125의 값을 받으면 중간으로 옴 yaw
+        joint1_angle = map_value(yaw, -180, 180, 0, 180)#map_value(yaw, -170, -70, 30, 150) 125의 값을 받으면 중간으로 옴 yaw
         joint2_angle = map_value(roll, -120, 120, 0, 130)
         # joint4_angle = map_value(roll, -120, 120, 0, 185)
 
