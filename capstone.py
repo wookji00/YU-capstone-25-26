@@ -21,11 +21,11 @@ def terminate_all():
             try:
                 os.killpg(os.getpgid(p.pid), signal.SIGINT)
                 print(f"프로세스 {p.pid}에 종료 신호 전송")
-                except Exception as e:
-                    try:
-                        p.terminate()
-                        except Exeption:
-                            pass
+            except Exception as e:
+                try:
+                    p.terminate()
+                    except Exeption:
+                        pass
     print("모든 시스템 종료")
 
 # main 함수 : 터미널 명령어를 순서대로 실행 및 프로세스로 할당
