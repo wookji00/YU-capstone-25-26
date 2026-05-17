@@ -53,29 +53,33 @@ def on_message(client, userdata, msg):
         roll = payload["roll"]
         pitch = payload["pitch"]
         yaw = payload["yaw"]
-        flex = payload["flex"]
+        flex1 = payload["flex1"]
+        flex2 = payload["flex2"]
 
         # ------------------------------------------
         # 💡 원격 로봇팔 구동을 위한 각도 계산 제어부
         # ------------------------------------------
         # 1. 밴딩(Flex) 센서 데이터를 이용한 집게 제어[cite: 3]
-        gripper_angle = map_value(flex, 80, 300, 180, 0)
+        gripper_angle = map_value(flex1, 80, 300, 180, 0)
+        wrist_up_down_angle = map_value(flex2, 80, 300, 180, 0)
         servo_gripper.angle = gripper_angle
+        servo_joint3.angle = wrist_up_down_angle
 
         # 2. IMU Pitch 각도를 이용한 수직 xz평면 로봇팔 제어[cite: 3]
-        base_joint_angle = map_value(pitch, -60, 60, 30, 150)
-        joint1_angle = base_joint_angle
-        joint2_angle = 180.0 - base_joint_angle
-        base_yaw_angle = map_value(yaw, -170, -70, 120, 180)
-        joint3_angle = base_yaw_angle
+        arm_up_down_angle = map_value(pitch, -60, 60, 30, 150)
+        arm_rotate_angle = map_value(yaw, -170, -70, 120, 180)
+        wrist_axis_rotate_angle = map_value(roll, -45, 45, 45, 135)
+        joint1_angle = arm_rotate_angle
+        joint2_angle = arm_up_down_angle
+        joint4_angle = wrist_axis_rotate_angle
 
         # 물리 서보모터 각도 출력[cite: 3]
         servo_joint1.angle = joint1_angle
         servo_joint2.angle = joint2_angle
-        servo_joint3.angle = joint3_angle
+        servo_joint4.angle = joint4_angle
 
         print(
-                f"📥 [Sub 구동] Flex:{flex:4d}, Pitch:{pitch:5d}°, Yaw:{yaw:5d}° ➔ Gripper:{gripper_angle:5d}° | J1:{joint1_angle:5d}°| base : {joint3_angle:5d}° | yaw:{base_yaw_angle:5d}"
+                f"📥 [Sub 구동] fore finger:{flex1:4d}°, mid finger:{flex2:4d}°, Roll:{roll:5d}°, Pitch:{pitch:5d}°, Yaw:{yaw:5d}° ➔ Gripper:{gripper_angle:5d}° | J1:{joint1_angle:5d}°| J2: {joint2_angle:5d}° | J3: {servo_joint3_angle:5d}° |J4: {joint4_angle:5d}° "
         )
 
     except Exception as e:

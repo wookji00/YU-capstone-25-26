@@ -80,7 +80,8 @@ try:
                                 "roll": int(value_list[0]),
                                 "pitch": int(value_list[1]),
                                 "yaw": int(value_list[2]),
-                                "flex": int(value_list[3]),
+                                "flex1": int(value_list[3]),
+                                "flex2": int(value_list[4]),
                                 "timestamp": time.time(),
                             }
 
